@@ -157,11 +157,18 @@ function showStage(index){
     </article>`;
   }).join('');
   const [heading,first,firstText,second,secondText,example]=stage.theory;
+  const secondExamples=[
+    'Un adolescente cambia de plan de estudios cada vez que alguien le propone uno distinto. Le cuesta identificar qué le interesa y qué espera de su futuro.',
+    'Tras mudarse, una persona rechaza repetidamente las invitaciones de sus colegas por temor a confiar en ellos. Aunque los ve a diario, siente que no tiene con quién hablar de lo que le preocupa.',
+    'Una persona con años de experiencia recibe varias invitaciones para orientar a quienes empiezan en su oficio. Aunque tiene tiempo y recursos, se desentiende y siente que su experiencia ya no aporta a nadie.',
+    'Al revisar su vida, una persona mayor se concentra en una relación que nunca pudo reparar y siente que ya es demasiado tarde para darle un sentido distinto a su historia.'
+  ];
   theory.innerHTML=`<p class="eyebrow">Teoría psicosocial de Erik Erikson</p>
     <h3>${heading}</h3>
     <p><b>${first}.</b> ${firstText}</p>
+    <p><b>Ejemplo de ${first.toLowerCase()}.</b> ${example}</p>
     <p><b>${second}.</b> ${secondText}</p>
-    <p><b>Ejemplo.</b> ${example}</p>`;
+    <p><b>Ejemplo de ${second.toLowerCase()}.</b> ${secondExamples[index]}</p>`;
 }
 
 stages.forEach((stage,index)=>{
