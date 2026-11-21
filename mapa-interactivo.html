@@ -20,6 +20,8 @@ main{max-width:1120px;margin:auto;padding:36px 24px}header{background:#163b35;co
 .case summary::marker{color:var(--accent)}
 .case .body{padding-top:0;font-size:.91rem}
 .branches{align-items:start}
+.theory h3{margin:4px 0 9px;font-size:1.23rem}
+.theory p+p{margin-top:8px}
 </style>
 </head>
 <body>
@@ -58,7 +60,7 @@ const stages = [
       ['El autoconcepto es la idea que tengo de mí. La autoestima es cómo valoro lo que percibo de mí. Explorar intereses, creencias y valores ayuda a construir la identidad y un proyecto de vida, incluso cuando hay incertidumbre.', 'Un estudiante prueba un taller y un deporte antes de decidir a cuál quiere dedicarle más tiempo.'],
       ['Los pares, las amistades, las relaciones románticas y las redes sociales ganan importancia. La búsqueda de independencia puede generar conflictos con la familia. Aprender a poner límites y pedir apoyo ayuda a afrontar la presión de grupo.', 'Una adolescente rechaza un reto riesgoso en redes y negocia con su familia un nuevo horario de salida.']
     ],
-    theory:['Identidad frente a confusión de roles','Para Erik Erikson, explorar roles y asumir compromisos ayuda a construir un sentido de identidad. Elegir un área de estudio tras probar varias opciones ilustra ese proceso.']
+    theory:['Identidad vs. confusión de roles','Identidad','Definir quién es uno mismo al explorar roles, valores y metas. La <b>fidelidad</b> consiste en mantener los compromisos y valores que se han elegido.','Confusión de roles','La desorientación y difusión de la identidad se reflejan en la dificultad para reconocer qué valores, roles o compromisos dan sentido a las propias decisiones.','Explorar distintos talleres y elegir un área de estudio acorde con los propios intereses.']
   },
   {
     name:'Adultez joven', age:'20–39 años', icon:'🧭', accent:'#1f6272', tint:'#dfeef0',
@@ -70,7 +72,7 @@ const stages = [
       ['La independencia se desarrolla al asumir responsabilidades y decidir qué metas encajan con los valores propios. La realización personal puede incluir trabajo, aprendizaje, creatividad o proyectos comunitarios.', 'Una joven organiza su presupuesto y reserva tiempo para un proyecto que le importa.'],
       ['La intimidad implica confianza y apertura en amistades y relaciones de pareja. En los vínculos románticos, la pasión y el compromiso pueden formar parte de la relación. Los cambios de trabajo o residencia también pueden exigir reconstruir redes de apoyo.', 'Al mudarse, una persona mantiene contacto con sus amistades y se integra a un grupo de su nueva comunidad.']
     ],
-    theory:['Intimidad frente a aislamiento','Erikson plantea el reto de establecer vínculos cercanos y recíprocos. Compartir preocupaciones con una amistad y brindarle apoyo cuando lo necesita es un ejemplo de intimidad.']
+    theory:['Intimidad vs. aislamiento','Intimidad','Para Erikson, es la capacidad de formar vínculos cercanos y duraderos, compartir sentimientos y comprometerse con otra persona conservando la propia identidad. El <b>amor</b> se expresa en la confianza, el cuidado y el apoyo mutuo, tanto en la amistad como en la pareja.','Aislamiento','Es el retraimiento o la dificultad para construir vínculos cercanos. Una persona puede convivir con otras y aun así sentirse aislada si le cuesta confiar, mostrarse vulnerable o pedir apoyo.','Contarle una preocupación a una amistad de confianza y escucharla cuando ella también necesita apoyo.']
   },
   {
     name:'Madurez', age:'40–64 años', icon:'🌳', accent:'#80481d', tint:'#f6e6d1',
@@ -82,7 +84,7 @@ const stages = [
       ['El autoconocimiento facilita revisar prioridades, valorar la satisfacción laboral y ajustar aspiraciones. Algunas personas buscan estabilidad y otras emprenden cambios al reconocer nuevas metas.', 'Después de años en un puesto, alguien decide capacitarse para asumir una función que le interesa más.'],
       ['Pueden coincidir el liderazgo laboral, el cuidado de familiares y el cambio de roles cuando los hijos se independizan, conocido como nido vacío. La empatía y la paciencia ayudan al negociar responsabilidades.', 'Una persona acuerda con sus hermanos cómo apoyar a un familiar mayor y orienta a colegas recién incorporados.']
     ],
-    theory:['Generatividad frente a estancamiento','En la teoría de Erikson, la generatividad consiste en cuidar, orientar o aportar a otras generaciones. Enseñar un oficio a alguien que empieza permite transmitir lo aprendido.']
+    theory:['Generatividad vs. estancamiento','Generatividad','Implica el <b>cuidado</b> y el aporte a las siguientes generaciones mediante la crianza, la enseñanza, el trabajo o la participación comunitaria.','Estancamiento','Se expresa en una falta de implicación productiva con otras personas o en la sensación de que los propios esfuerzos dejan poco aporte.','Enseñar un oficio a alguien que empieza y acompañar su aprendizaje.']
   },
   {
     name:'Vejez', age:'65 años en adelante', icon:'🍂', accent:'#714466', tint:'#f1e2ee',
@@ -94,7 +96,7 @@ const stages = [
       ['Revisar la propia historia puede ayudar a integrar logros, pérdidas y decisiones. La preocupación por la muerte o por perder autonomía puede convivir con el disfrute, la curiosidad y los proyectos.', 'Una mujer reúne fotografías familiares y explica qué aprendió de momentos difíciles y felices.'],
       ['La jubilación, los duelos y los cambios de movilidad pueden modificar la red social. Las amistades, la comunidad y los vínculos intergeneracionales ofrecen oportunidades de apoyo y participación.', 'Tras jubilarse, un hombre se integra a una huerta comunitaria y comparte sus conocimientos con vecinos jóvenes.']
     ],
-    theory:['Integridad frente a desesperación','Según Erikson, la integridad implica aceptar la propia trayectoria como un todo. Recordar decisiones difíciles y reconocer lo que dieron a la propia vida ilustra esa revisión.']
+    theory:['Integridad vs. desesperación','Integridad','Consiste en mirar la propia vida con aceptación y reconocer el sentido de la trayectoria, incluidos los logros, las pérdidas y las decisiones difíciles. Erikson vincula esta aceptación con la <b>sabiduría</b>.','Desesperación','Puede surgir cuando predominan el arrepentimiento por lo que quedó pendiente y la sensación de tener poco tiempo para cambiar la propia historia.','Al revisar sus recuerdos, una persona reconoce decisiones que lamenta y aprendizajes que valora.']
   }
 ];
 const dimensions=[['⚡','Físico'],['💡','Cognitivo'],['🪞','Personal'],['🤝','Social']];
@@ -121,7 +123,7 @@ const keywordsByStage={
   ],
   'Vejez':[
     'Miedo a la muerte','Pérdida de melanina','Osteoporosis','Teorías del envejecimiento',
-    'Reloj biológico','Integridad frente a desesperación','Deterioro cognitivo'
+    'Reloj biológico','Integridad vs. desesperación','Deterioro cognitivo'
   ]
 };
 const map=document.getElementById('map');
@@ -154,7 +156,12 @@ function showStage(index){
       <details class="case"><summary>Ver ejemplo práctico</summary><p class="body">${example}</p></details>
     </article>`;
   }).join('');
-  theory.innerHTML=`<strong>${stage.theory[0]}</strong><p>${stage.theory[1]}</p>`;
+  const [heading,first,firstText,second,secondText,example]=stage.theory;
+  theory.innerHTML=`<p class="eyebrow">Teoría psicosocial de Erik Erikson</p>
+    <h3>${heading}</h3>
+    <p><b>${first}.</b> ${firstText}</p>
+    <p><b>${second}.</b> ${secondText}</p>
+    <p><b>Ejemplo.</b> ${example}</p>`;
 }
 
 stages.forEach((stage,index)=>{
