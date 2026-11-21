@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mapa interactivo del ciclo vital</title>
+<style>
+:root{color-scheme:light;--ink:#172c2a;--muted:#4a605b;--paper:#f4f2e8;--line:#c3cdc0}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,sans-serif}h1,h2,p{margin:0}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #245694;outline-offset:4px}
+main{max-width:1120px;margin:auto;padding:36px 24px}header{background:#163b35;color:#fff9e9;border-radius:26px;text-align:center;padding:38px 18px 34px;background-image:radial-gradient(ellipse at 50% 115%,#326155,transparent 65%)}h1{font:clamp(2.5rem,7vw,5rem)/1 Georgia,serif;letter-spacing:-.055em}header p{margin-top:14px;color:#dce9d8}.map{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding-top:32px}.map:before{content:"";position:absolute;top:16px;left:12.5%;right:12.5%;border-top:2px solid var(--line)}.map:after{content:"";position:absolute;top:0;left:50%;height:17px;border-left:2px solid var(--line)}.stage{position:relative;border:2px solid transparent;border-radius:16px;text-align:left;background:var(--tint);padding:14px 15px;min-height:118px}.stage:before{content:"";position:absolute;top:-19px;left:50%;height:16px;border-left:2px solid var(--line)}.stage[aria-pressed=true]{border-color:var(--accent);box-shadow:inset 0 -4px var(--accent)}.stage strong,.stage small{display:block}.stage small{color:var(--muted)}.symbol{display:block;font-size:1.55rem}
+.panel{background:#fffdf7;border:1px solid var(--line);border-radius:23px;margin-top:19px;padding:clamp(16px,4vw,32px)}.eyebrow{font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;font-weight:750;color:var(--accent)}h2{font:clamp(2rem,5vw,3.1rem)/1.12 Georgia,serif;margin:4px 0 9px}.intro{color:var(--muted)}.branches{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}details{border:1px solid var(--line);border-radius:13px;background:#fffdf7}summary{cursor:pointer;font-weight:700;padding:12px 15px;min-height:44px}details[open] summary{background:var(--tint,#e6ede3);border-radius:12px 12px 0 0}.body{padding:12px 15px 15px}.example{margin-top:9px;color:var(--muted)}.theory{padding:15px 18px;margin-top:17px;border-left:4px solid var(--accent);border-radius:0 12px 12px 0;background:var(--tint)}.theory strong{display:block;margin-bottom:3px}.sources{margin-top:18px;color:var(--muted);font-size:.89rem}.sources details{margin-top:10px}.sources ul{margin:0;padding-left:22px}.sources a{color:#194f43}
+@media(max-width:640px){main{padding:18px 12px}.map{grid-template-columns:1fr 1fr;padding-top:14px;gap:9px}.map:before,.map:after,.stage:before{display:none}.stage{min-height:104px;padding:10px}.branches{grid-template-columns:1fr}}
+.keywords{margin-top:16px}.keywords ul{display:flex;flex-wrap:wrap;gap:7px;list-style:none;margin:0;padding:0}.keywords li{background:var(--tint);border-radius:20px;padding:4px 11px;font-size:.88rem}
+.dimension{min-width:0;border:1px solid var(--line);border-radius:16px;background:#fffdf7;display:flex;flex-direction:column}
+.dimension h3{display:flex;align-items:center;gap:10px;margin:0;padding:13px 16px;border-radius:15px 15px 0 0;background:var(--tint);font-size:1rem}
+.dimension h3 span{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:#fffdf7}
+.dimension>p{padding:14px 16px;flex:1}
+.dimension .case{margin:0 12px 12px;border:0;background:var(--tint);border-radius:10px}
+.case summary{font-size:.88rem;color:var(--accent)}
+.case summary::marker{color:var(--accent)}
+.case .body{padding-top:0;font-size:.91rem}
+.branches{align-items:start}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Ciclo vital</h1>
+    <p>El desarrollo humano desde la adolescencia hasta la vejez</p>
+  </header>
+  <nav class="map" aria-label="Etapas del desarrollo" id="map"></nav>
+  <section class="panel" id="panel" aria-labelledby="title">
+    <div class="eyebrow" id="age"></div>
+    <h2 id="title" aria-live="polite"></h2>
+    <p class="intro" id="intro"></p>
+    <div class="branches" id="branches"></div>
+    <details class="keywords" open><summary>Palabras clave</summary><div class="body"><ul id="keywords"></ul></div></details>
+    <div class="theory" id="theory"></div>
+  </section>
+  <footer class="sources">
+    <p>Las edades son orientativas. El desarrollo varía según la persona y su contexto.</p>
+    <details open><summary>Referencias</summary><div class="body"><ul>
+      <li>Erikson, E. H. (1963). <cite>Childhood and society</cite> (2.ª ed., revisada y ampliada). W. W. Norton &amp; Company.</li>
+      <li>Rodríguez, D. (2020). <cite>Desarrollo humano II</cite>. Ediciones UAPA.</li>
+    </ul></div></details>
+  </footer>
+  <noscript>Activa JavaScript en tu navegador para explorar las etapas del mapa.</noscript>
+</main>
+<script>
+const stages = [
+  {
+    name:'Adolescencia', age:'10–19 años', icon:'🌱', accent:'#365c38', tint:'#e4eddb',
+    theme:'Identidad y autonomía',
+    intro:'La pubertad, las nuevas formas de pensar y los cambios en los vínculos abren preguntas sobre quién soy y qué quiero hacer.',
+    branches:[
+      ['La pubertad implica cambios hormonales, crecimiento y maduración sexual. El momento y el ritmo de estos cambios varían y pueden influir en la imagen corporal.', 'Dos compañeros de la misma edad experimentan el estirón en momentos distintos.'],
+      ['Se amplía la capacidad de pensar en ideas abstractas, cuestionar argumentos y anticipar consecuencias. La emoción y la presión del momento pueden favorecer respuestas impulsivas. El desarrollo moral se refleja al justificar decisiones con base en valores.', 'Antes de compartir un rumor, una estudiante comprueba la fuente y piensa a quién podría afectar.'],
+      ['El autoconcepto es la idea que tengo de mí. La autoestima es cómo valoro lo que percibo de mí. Explorar intereses, creencias y valores ayuda a construir la identidad y un proyecto de vida, incluso cuando hay incertidumbre.', 'Un estudiante prueba un taller y un deporte antes de decidir a cuál quiere dedicarle más tiempo.'],
+      ['Los pares, las amistades, las relaciones románticas y las redes sociales ganan importancia. La búsqueda de independencia puede generar conflictos con la familia. Aprender a poner límites y pedir apoyo ayuda a afrontar la presión de grupo.', 'Una adolescente rechaza un reto riesgoso en redes y negocia con su familia un nuevo horario de salida.']
+    ],
+    theory:['Identidad frente a confusión de roles','Para Erik Erikson, explorar roles y asumir compromisos ayuda a construir un sentido de identidad. Elegir un área de estudio tras probar varias opciones ilustra ese proceso.']
+  },
+  {
+    name:'Adultez joven', age:'20–39 años', icon:'🧭', accent:'#1f6272', tint:'#dfeef0',
+    theme:'Independencia e intimidad',
+    intro:'Las decisiones sobre estudios, trabajo y relaciones van dando forma a los proyectos personales.',
+    branches:[
+      ['La fuerza y la resistencia suelen ser altas al inicio de la etapa. Las rutinas de descanso, movimiento y alimentación influyen en cómo se sostiene el bienestar al asumir nuevas responsabilidades.', 'Una persona ajusta su horario de sueño al empezar a trabajar y estudiar al mismo tiempo.'],
+      ['La experiencia ayuda a tomar decisiones cuando hay varias soluciones posibles. Adaptarse a entornos nuevos implica evaluar recursos, prioridades y consecuencias.', 'Al elegir entre dos empleos, alguien compara el ingreso, el traslado y el tiempo disponible para seguir estudiando.'],
+      ['La independencia se desarrolla al asumir responsabilidades y decidir qué metas encajan con los valores propios. La realización personal puede incluir trabajo, aprendizaje, creatividad o proyectos comunitarios.', 'Una joven organiza su presupuesto y reserva tiempo para un proyecto que le importa.'],
+      ['La intimidad implica confianza y apertura en amistades y relaciones de pareja. En los vínculos románticos, la pasión y el compromiso pueden formar parte de la relación. Los cambios de trabajo o residencia también pueden exigir reconstruir redes de apoyo.', 'Al mudarse, una persona mantiene contacto con sus amistades y se integra a un grupo de su nueva comunidad.']
+    ],
+    theory:['Intimidad frente a aislamiento','Erikson plantea el reto de establecer vínculos cercanos y recíprocos. Compartir preocupaciones con una amistad y brindarle apoyo cuando lo necesita es un ejemplo de intimidad.']
+  },
+  {
+    name:'Madurez', age:'40–64 años', icon:'🌳', accent:'#80481d', tint:'#f6e6d1',
+    theme:'Experiencia y contribución',
+    intro:'La experiencia acumulada permite replantear metas, asumir nuevos roles y compartir conocimientos.',
+    branches:[
+      ['Pueden cambiar la fuerza, la recuperación física y la función sexual. La menopausia marca el fin de los periodos menstruales. En los hombres, los cambios hormonales pueden ser graduales y variables.', 'Una persona adapta la intensidad de su actividad física según cómo se recupera.'],
+      ['La inteligencia cristalizada reúne conocimientos y habilidades adquiridos con la experiencia. Puede ayudar a resolver problemas conocidos, aunque algunas tareas nuevas requieran más tiempo.', 'Una trabajadora identifica la causa de una falla porque recuerda situaciones parecidas y aplica lo aprendido.'],
+      ['El autoconocimiento facilita revisar prioridades, valorar la satisfacción laboral y ajustar aspiraciones. Algunas personas buscan estabilidad y otras emprenden cambios al reconocer nuevas metas.', 'Después de años en un puesto, alguien decide capacitarse para asumir una función que le interesa más.'],
+      ['Pueden coincidir el liderazgo laboral, el cuidado de familiares y el cambio de roles cuando los hijos se independizan, conocido como nido vacío. La empatía y la paciencia ayudan al negociar responsabilidades.', 'Una persona acuerda con sus hermanos cómo apoyar a un familiar mayor y orienta a colegas recién incorporados.']
+    ],
+    theory:['Generatividad frente a estancamiento','En la teoría de Erikson, la generatividad consiste en cuidar, orientar o aportar a otras generaciones. Enseñar un oficio a alguien que empieza permite transmitir lo aprendido.']
+  },
+  {
+    name:'Vejez', age:'65 años en adelante', icon:'🍂', accent:'#714466', tint:'#f1e2ee',
+    theme:'Adaptación y sentido de vida',
+    intro:'La experiencia, los vínculos y los recursos del entorno influyen en cómo se viven los cambios de esta etapa.',
+    branches:[
+      ['La menor producción de melanina en el cabello favorece las canas. También puede disminuir la densidad ósea, y la osteoporosis aumenta el riesgo de fracturas. Las teorías del envejecimiento estudian procesos biológicos regulados y la acumulación de daño celular.', 'Una persona reorganiza el espacio de su casa para moverse con mayor facilidad.'],
+      ['Puede disminuir la velocidad de procesamiento o costar más recordar algunos datos recientes. El vocabulario y otros conocimientos acumulados pueden mantenerse. La demencia se distingue del envejecimiento habitual por un deterioro que interfiere con la vida cotidiana.', 'Una persona usa un calendario para sus citas y sigue enseñando recetas que conoce desde hace años.'],
+      ['Revisar la propia historia puede ayudar a integrar logros, pérdidas y decisiones. La preocupación por la muerte o por perder autonomía puede convivir con el disfrute, la curiosidad y los proyectos.', 'Una mujer reúne fotografías familiares y explica qué aprendió de momentos difíciles y felices.'],
+      ['La jubilación, los duelos y los cambios de movilidad pueden modificar la red social. Las amistades, la comunidad y los vínculos intergeneracionales ofrecen oportunidades de apoyo y participación.', 'Tras jubilarse, un hombre se integra a una huerta comunitaria y comparte sus conocimientos con vecinos jóvenes.']
+    ],
+    theory:['Integridad frente a desesperación','Según Erikson, la integridad implica aceptar la propia trayectoria como un todo. Recordar decisiones difíciles y reconocer lo que dieron a la propia vida ilustra esa revisión.']
+  }
+];
+const dimensions=[['⚡','Físico'],['💡','Cognitivo'],['🪞','Personal'],['🤝','Social']];
+const keywordsByStage={
+  'Adolescencia':[
+    'Identidad','Autonomía','Pubertad','Autoestima','Autoconcepto','Maduración',
+    'Cambios hormonales','Pensamiento abstracto','Pensamiento crítico','Emociones',
+    'Impulsividad','Toma de decisiones','Grupo de pares','Amistades','Relaciones románticas',
+    'Influencia social','Presión de grupo','Independencia','Familia','Conflictos',
+    'Sexualidad','Valores','Creencias','Consecución de la identidad','Exploración',
+    'Proyecto de vida','Desarrollo moral','Redes sociales','Riesgo','Adaptación','Incertidumbre'
+  ],
+  'Adultez joven':[
+    'Adaptación','Intimidad','Independencia','Compromiso','Pasión','Vínculos',
+    'Aislamiento','Toma de decisiones','Responsabilidades','Realización personal',
+    'Madurez','Metas','Trabajo','Experiencias','Creencias y valores','Proyectos','Aspiraciones'
+  ],
+  'Madurez':[
+    'Experiencia','Compromiso','Generatividad','Erik Erikson','Inteligencia cristalizada',
+    'Cambios cognitivos','Replanteamiento','Satisfacción laboral','Menopausia',
+    'Cambios hormonales masculinos','Responsabilidad','Sabiduría','Estabilidad',
+    'Autoconocimiento','Independencia','Paciencia','Empatía','Liderazgo','Aceptación',
+    'Tolerancia','Nido vacío','Sexualidad'
+  ],
+  'Vejez':[
+    'Miedo a la muerte','Pérdida de melanina','Osteoporosis','Teorías del envejecimiento',
+    'Reloj biológico','Integridad frente a desesperación','Deterioro cognitivo'
+  ]
+};
+const map=document.getElementById('map');
+const panel=document.getElementById('panel');
+const age=document.getElementById('age');
+const title=document.getElementById('title');
+const intro=document.getElementById('intro');
+const branches=document.getElementById('branches');
+const keywords=document.getElementById('keywords');
+const theory=document.getElementById('theory');
+
+function showStage(index){
+  const stage=stages[index];
+  Array.from(map.children).forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));
+  panel.style.setProperty('--accent',stage.accent);
+  panel.style.setProperty('--tint',stage.tint);
+  age.textContent=stage.age+' · '+stage.theme;
+  title.textContent=stage.name;
+  intro.textContent=stage.intro;
+  keywords.replaceChildren(...keywordsByStage[stage.name].map(word=>{
+    const item=document.createElement('li');
+    item.textContent=word;
+    return item;
+  }));
+  branches.innerHTML=stage.branches.map(([description,example],i)=>{
+    const [icon,label]=dimensions[i];
+    return `<article class="dimension">
+      <h3><span aria-hidden="true">${icon}</span>${label}</h3>
+      <p>${description}</p>
+      <details class="case"><summary>Ver ejemplo práctico</summary><p class="body">${example}</p></details>
+    </article>`;
+  }).join('');
+  theory.innerHTML=`<strong>${stage.theory[0]}</strong><p>${stage.theory[1]}</p>`;
+}
+
+stages.forEach((stage,index)=>{
+  const button=document.createElement('button');
+  button.type='button';
+  button.className='stage';
+  button.style.setProperty('--accent',stage.accent);
+  button.style.setProperty('--tint',stage.tint);
+  button.setAttribute('aria-controls','panel');
+  button.innerHTML=`<span class="symbol" aria-hidden="true">${stage.icon}</span><strong>${stage.name}</strong><small>${stage.age}</small>`;
+  button.addEventListener('click',()=>showStage(index));
+  map.append(button);
+});
+showStage(0);
+</script>
+</body>
+</html>
